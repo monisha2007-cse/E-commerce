@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist — BuyBliss</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- 🌟 Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo"><a href="index.html"><i class="fa-solid fa-cart-shopping"></i> BuyBliss</a></div>
+      <ul class="nav-links">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="wishlist.html" class="active"><i class="fas fa-heart"></i> Wishlist</a></li>
+        <li><a href="orders.html"><i class="fas fa-box"></i> Orders</a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+        <li><a href="login.html"><i class="fas fa-user"></i> Login</a></li>
+        <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="wishlist-section">
+    <h2>My Wishlist</h2>
+    <div id="wishlistContainer" class="product-grid"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 BuyBliss. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const wishlistContainer = document.getElementById("wishlistContainer");
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    if (wishlist.length === 0) {
+      wishlistContainer.innerHTML = "<p>Your wishlist is empty 💔</p>";
+    } else {
+      wishlist.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("product-card");
+        div.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>${item.price}</p>
+          <button class="btn remove-btn">Remove</button>
+        `;
+        wishlistContainer.appendChild(div);
+      });
+    }
+
+    wishlistContainer.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-btn")) {
+        const name = e.target.previousElementSibling.previousElementSibling.innerText;
+        let updatedWishlist = wishlist.filter(item => item.name !== name);
+        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+        e.target.parentElement.remove();
+        if (updatedWishlist.length === 0) {
+          wishlistContainer.innerHTML = "<p>Your wishlist is empty 💔</p>";
+        }
+      }
+    });
+  </script>
+</body>
+</html>
